@@ -71,7 +71,15 @@ jobs:
       run: |
          kubectl apply -f deployment.yaml
          kubectl apply -f service.yaml
-    - name: Test service URLs
+    - name: Try the cluster !
       run: |
-          minikube service list
-          minikube service myapp-service --url
+       kubectl get pods -A
+       kubectl get pods
+       kubectl describe pods
+       kubectl get deployments
+       
+      
+    # - name: Test service URLs
+     # run: |
+      # minikube service list
+       # minikube service myapp-service --url
