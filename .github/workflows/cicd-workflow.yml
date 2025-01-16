@@ -10,7 +10,7 @@ on:
     #  - main  # Trigger the pipeline for pull requests to the main branch
 
 jobs:
-  build-and-deploy:
+  Build:
     runs-on: ubuntu-latest  # GitHub-hosted runner (Ubuntu is used, but you can choose other OS like macOS or Windows)
 
     steps:
@@ -28,17 +28,23 @@ jobs:
     # Step 3: Build the Java application with Maven (you can replace this with Gradle if needed)
     - name: Build with Maven
       run: mvn clean install -DskipTests
-
+  Package:
+   runs-on: ubuntu-latest
+   steps:
+   
     # Step 4: Package the application (skip tests during packaging)
     - name: Package the application (skip tests)
       run: mvn package -DskipTests
-
+      
+  Docker-image-build:
+   runs-on: ubuntu-latest
+   steps:
+    
     # Step 5: Build the Docker image
     - name: Build Docker image
       run: |
         docker build -t hassan1049/myapp:v1 .
-
-
+    
     # Step 6: Log in to Docker Hub (using GitHub Secrets)
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
@@ -50,7 +56,11 @@ jobs:
     - name: Push Docker image to Docker Hub
       run: |
         docker push hassan1049/myapp:v1
-
+  
+  Setup-Kubernets:
+   runs-on: my-runner
+   steps:
+   
     # Step 8: Set up kubectl for Kubernetes deployment
     - name: Set up kubectl
       uses: medyagh/setup-minikube@v0.0.16
@@ -59,8 +69,9 @@ jobs:
     - name: Set up Minikube
       run: |
        minikube start
-
-
+ # Deploy-Kubernets:
+  # runs-on: mac-runner
+  # steps:
     # Step 10: Deploy to Kubernetes (using kubectl)
     - name: Deploy to Kubernetes
       run: |
