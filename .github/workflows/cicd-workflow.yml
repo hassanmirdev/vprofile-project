@@ -28,17 +28,17 @@ jobs:
     # Step 3: Build the Java application with Maven (you can replace this with Gradle if needed)
     - name: Build with Maven
       run: mvn clean install -DskipTests
-  Package:
-   needs: Build
-   runs-on: ubuntu-latest
-   steps:
+ # Package:
+ #  needs: Build
+  # runs-on: ubuntu-latest
+ #  steps:
    
     # Step 4: Package the application (skip tests during packaging)
     - name: Package the application (skip tests)
       run: mvn package -DskipTests
       
   Docker-image-build:
-   needs: Package
+   needs: Build
    runs-on: ubuntu-latest
    steps:
     
