@@ -1,6 +1,6 @@
 name: vprofile-app workflow
 on:
- push:
+ workflow_dispatch:
 jobs:
   vprofile-demo:
     runs-on: ubuntu-latest
