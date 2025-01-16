@@ -52,15 +52,12 @@ jobs:
 
     # Step 8: Set up kubectl for Kubernetes deployment
     - name: Set up kubectl
-      uses: azure/setup-kubectl@v2
+      uses: medyagh/setup-minikube@v0.0.16
       with:
-        version: 'v1.21.0'  # specify the version of kubectl, if necessary
-
-    # Step 9: Set up Kubeconfig to authenticate kubectl with the Kubernetes cluster
-    - name: Set up Kubeconfig
+        version: 1.33.0 # specify the version of kubectl, if necessary
+    - name: Set up Minikube
       run: |
-        echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig
-        export KUBECONFIG=$(pwd)/kubeconfig
+       minikube start
 
     # Step 10: Deploy to Kubernetes (using kubectl)
     - name: Deploy to Kubernetes
