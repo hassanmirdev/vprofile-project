@@ -65,8 +65,8 @@ jobs:
     # Step 10: Deploy to Kubernetes (using kubectl)
     - name: Deploy to Kubernetes
       run: |
-        kubectl apply -f k8s/deployment.yaml
-        kubectl apply -f k8s/service.yaml
+        kubectl apply -f deployment.yaml
+        kubectl apply -f service.yaml
 
     # Step 11: Get the service URL
     - name: Get the service URL
