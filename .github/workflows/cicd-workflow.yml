@@ -75,12 +75,15 @@ jobs:
     # Step 11: Get the service URL
     - name: Get the service URL
       run: |
-        # Since Minikube uses NodePort, we will expose the service on a node port.
+       # Since Minikube uses NodePort, we will expose the service on a node port.
         SERVICE_URL=$(minikube service myapp-service --url)
         echo "Service URL: $SERVICE_URL"
+
+    - name: Verify pod status
+      run: |
+       kubectl get pods
+       kubectl describe pods
+       kubectl get deployments
+       kubectl get svc
     
-    # Verify deployment
-    # - name: Verify deployment
-    # run: |
-    # kubectl get pods
-     # kubectl get services
+    
