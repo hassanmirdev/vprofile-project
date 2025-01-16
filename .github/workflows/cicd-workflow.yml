@@ -70,3 +70,9 @@ jobs:
       run: |
         SERVICE_URL=$(kubectl get svc myapp-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
         echo "Service URL: $SERVICE_URL"
+    
+    # Verify deployment
+    - name: Verify deployment
+      run: |
+       kubectl get pods
+       kubectl get services
