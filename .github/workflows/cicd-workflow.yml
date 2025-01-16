@@ -16,7 +16,7 @@ jobs:
     steps:
     # Step 1: Checkout the code from GitHub repository
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4.2.2
 
     # Step 2: Set up JDK 11 (or any version you need)
     - name: Set up JDK
@@ -38,7 +38,6 @@ jobs:
       run: mvn package -DskipTests
       
   Docker-image-build:
-   needs: Build
    runs-on: ubuntu-latest
    steps:
     
@@ -60,7 +59,6 @@ jobs:
         docker push hassan1049/myapp:v1
   
   Setup-Kubernets:
-   needs: Docker-image-build
    runs-on: my-runner
    steps:
    
