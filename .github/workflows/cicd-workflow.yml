@@ -64,6 +64,12 @@ jobs:
       run: |
         kubectl apply -f deployment.yaml
         kubectl apply -f service.yaml
+    - name: Verify pod status
+      run: |
+       kubectl get pods
+       kubectl describe pods
+       kubectl get svc
+       
     # Step 11: Get the service URL
     - name: Get the service URL
       run: |
@@ -72,7 +78,7 @@ jobs:
         echo "Service URL: $SERVICE_URL"
     
     # Verify deployment
-    - name: Verify deployment
-      run: |
-       kubectl get pods
-       kubectl get services
+    # - name: Verify deployment
+    # run: |
+    # kubectl get pods
+     # kubectl get services
