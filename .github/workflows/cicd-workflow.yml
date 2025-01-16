@@ -64,11 +64,11 @@ jobs:
       run: |
         kubectl apply -f deployment.yaml
         kubectl apply -f service.yaml
-
     # Step 11: Get the service URL
     - name: Get the service URL
       run: |
-        SERVICE_URL=$(kubectl get svc myapp-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+        # Since Minikube uses NodePort, we will expose the service on a node port.
+        SERVICE_URL=$(minikube service myapp-service --url)
         echo "Service URL: $SERVICE_URL"
     
     # Verify deployment
