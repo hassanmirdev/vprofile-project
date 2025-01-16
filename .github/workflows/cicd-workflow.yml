@@ -75,8 +75,19 @@ jobs:
       run: |
        kubectl get pods -A
        kubectl get pods
+    - name: Describe pods
+      run: |
        kubectl describe pods
+    - name: get deployment details
+      run: |
        kubectl get deployments
+       kubectl describe deployment myapp -n default
+
+    - name: Try the cluster !
+      run: |
+       kubectl describe service myapp-service -n default
+
+
        
       
     # - name: Test service URLs
