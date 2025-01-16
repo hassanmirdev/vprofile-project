@@ -37,9 +37,6 @@ jobs:
     - name: Package the application (skip tests)
       run: mvn package -DskipTests
       
-  Docker-image-build:
-   runs-on: ubuntu-latest
-   steps:
     
     # Step 5: Build the Docker image
     - name: Build Docker image
