@@ -74,4 +74,4 @@ jobs:
     - name: Test service URLs
       run: |
           minikube service list
-          minikube service myaap-service --url
+          minikube service myapp-service --url
