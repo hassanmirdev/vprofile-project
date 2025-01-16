@@ -58,7 +58,8 @@ jobs:
         version: 1.33.0 # specify the version of kubectl, if necessary
     - name: Set up Minikube
       run: |
-       minikube start
+       minikube start --cpus=4 --memory=8192
+
 
     # Step 10: Deploy to Kubernetes (using kubectl)
     - name: Deploy to Kubernetes
