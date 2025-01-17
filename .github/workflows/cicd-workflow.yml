@@ -130,3 +130,11 @@ jobs:
       run: |
         minikube service list # List all the services exposed by Minikube.
         # minikube service myapp-service --url # Optionally, get the URL for the 'myapp-service' service.
+        echo "Event: ${{ github.event_name }}"
+        echo "Repository: ${{ github.repository }}"
+        echo "Commit SHA: ${{ github.sha }}"
+        echo "Branch Name: ${{ github.ref }}"
+        echo "Actor: ${{ github.actor }}"
+        echo "Run ID: ${{ github.run_id }}"
+        echo "Workflow Name: ${{ github.workflow }}"
+        echo "Job Status: ${{ job.status }}"
