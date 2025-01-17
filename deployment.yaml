@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: myapp
-          image: "hassan1049/myapp:v2"
+          image: "hassan1049/myapp:v4"
           ports:
             - containerPort: 8080
