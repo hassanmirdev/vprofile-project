@@ -1,0 +1,34 @@
+name: Build and Test Java Application
+
+on:
+  workflow_call:  # This workflow will be called from another workflow
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.2.2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v4.6.0
+      with:
+        java-version: '17'
+        distribution: 'microsoft'
+
+    - name: Build with Maven
+      run: mvn clean install -DskipTests
+
+    - name: Run tests (conditionally)
+      if: ${{ success() }} # This step will only run if the previous steps were successful.
+      run: |
+        mvn test # Run tests only if the build was successful.
+    
+    - name: Notify on failure (conditionally)
+      if: ${{ failure() }} # This step will only run if any of the previous steps failed.
+      run: |
+          echo "Build or Tests Failed!" # Output an error message or notify the team.
+
+    - name: Package the application
+      run: mvn package -DskipTests
