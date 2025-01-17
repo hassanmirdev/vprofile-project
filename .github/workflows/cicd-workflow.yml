@@ -126,7 +126,7 @@ jobs:
       run: |
         kubectl describe service myapp-service -n default # Describe the 'myapp-service' service to check its status.
 
-    - name: Test service URLs
+    - name: Test service URLs and context details.
       run: |
         minikube service list # List all the services exposed by Minikube.
         # minikube service myapp-service --url # Optionally, get the URL for the 'myapp-service' service.
