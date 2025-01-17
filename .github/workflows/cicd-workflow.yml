@@ -1,102 +1,90 @@
 name: Java CI/CD Pipeline
 
 on:
- workflow_dispatch:
-  # push:
-   # branches:
-    #  - main  
-  # pull_request:
-   # branches:
-    #  - main 
+  workflow_dispatch: # Trigger this workflow manually.
+
 jobs:
   Build:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest # Runs the job on the latest version of Ubuntu.
+
     steps:
-    # Step 1: Checkout the code from GitHub repository
     - name: Checkout repository
-      uses: actions/checkout@v4.2.2
+      uses: actions/checkout@v4.2.2 # Checkout the code from the GitHub repository, 
+                                    #  These actions are maintained by GitHub or are widely used in the community.
 
-    # Step 2: Set up JDK 17 (or any version you need)
     - name: Set up JDK
-      uses: actions/setup-java@v4.6.0
+      uses: actions/setup-java@v4.6.0 # Set up JDK 17 using Microsoft's distribution.
       with:
-        java-version: '17'
-        distribution: 'microsoft'
+        java-version: '17' # Specify Java version 17.
+        distribution: 'microsoft' # Use Microsoft's JDK distribution.
 
-    # Step 3: Build the Java application with Maven (you can replace this with Gradle if needed)
     - name: Build with Maven
-      run: mvn clean install -DskipTests
-   
-    # Step 4: Package the application (skip tests during packaging)
+      run: mvn clean install -DskipTests # Build the Java application with Maven and skip tests.
+
     - name: Package the application (skip tests)
-      run: mvn package -DskipTests
-      
-    
-    # Step 5: Build the Docker image
+      run: mvn package -DskipTests # Package the application and skip tests during packaging.
+
+    # Docker build steps are commented out for now.
     # - name: Build Docker image
-      # run: |
-      #  docker build -t hassan1049/myapp:v1 .
-    
-    # Step 6: Log in to Docker Hub (using GitHub Secrets)
+    #   run: |
+    #     docker build -t hassan1049/myapp:v1 . # Build Docker image using the Dockerfile.
+
     - name: Log in to Docker Hub
-      uses: docker/login-action@v2
+      uses: docker/login-action@v2 # Log in to Docker Hub using credentials stored in GitHub secrets.
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        username: ${{ secrets.DOCKER_USERNAME }} # Docker Hub username from secrets.
+        password: ${{ secrets.DOCKER_PASSWORD }} # Docker Hub password from secrets.
 
-    # Step 7: Push the Docker image to Docker Hub
+    # Docker push steps are commented out for now.
     # - name: Push Docker image to Docker Hub
-     # run: |
-      #  docker push hassan1049/myapp:v1
-  
-   
-    # Step 8: Set up minikube for Kubernetes deployment
-    - name: Set up kubectl
-      uses: medyagh/setup-minikube@master
+    #   run: |
+    #     docker push hassan1049/myapp:v1 # Push the built Docker image to Docker Hub.
 
-    - name: Test the cluster !
-      run: kubectl get pods -A
-      
+    - name: Set up kubectl- minikube for deployment.
+      uses: medyagh/setup-minikube@master # Third-Party or Community-Maintained Actions
+                                          # These actions are maintained by the GitHub community or other external contributors
+
+    - name: Test the cluster!
+      run: kubectl get pods -A # Check the status of all pods in the Kubernetes cluster.
+
     - name: Build image
       run: |
-          export SHELL=/bin/bash
-          eval $(minikube -p minikube docker-env)
-          docker build -t hassan1049/myapp:v2 .
-          docker push hassan1049/myapp:v2
-          echo -n "verifying images:"
-          docker images      
-  
+          export SHELL=/bin/bash # Ensure the bash shell is used.
+          eval $(minikube -p minikube docker-env) # Set up Docker environment for Minikube.
+          docker build -t hassan1049/myapp:v2 . # Build Docker image for deployment.
+          docker push hassan1049/myapp:v2 # Push the Docker image to Docker Hub.
+          echo -n "verifying images:" # Display images list after build.
+          docker images # Show all Docker images available.
+
     - name: Deploy to minikube
       run: |
-         kubectl apply -f deployment.yaml
-         kubectl apply -f service.yaml
-    - name: Delay for a minutes
+         kubectl apply -f deployment.yaml # Deploy the application using Kubernetes deployment configuration.
+         kubectl apply -f service.yaml # Deploy the service using the service configuration.
+
+    - name: Delay for a minute
       run: |
-        echo "wait 1 minute..."
-        sleep 60  # Sleep for 300 seconds (5 minutes)
-    
+        echo "wait 1 minute..." # Print wait message.
+        sleep 60  # Sleep for 60 seconds (1 minute).
+
     - name: Try the cluster and Pods
       run: |
-       kubectl get pods -A
-       kubectl get pods
-    
-    - name: Describe pods to see if there is any issues with the pod.
-      run: |
-       kubectl describe pods
-    
-    - name: get deployment details
-      run: |
-       kubectl get deployments
-       kubectl describe deployment myapp -n default
+       kubectl get pods -A # Check the status of all pods across namespaces.
+       kubectl get pods # Check the status of pods in the current namespace.
 
-    - name: Try the cluster !
+    - name: Describe pods to see if there are any issues with the pod.
       run: |
-       kubectl describe service myapp-service -n default
+       kubectl describe pods # Describe pods to get detailed information and diagnose issues.
 
+    - name: Get deployment details
+      run: |
+       kubectl get deployments # List all deployments in the cluster.
+       kubectl describe deployment myapp -n default # Describe the 'myapp' deployment in the default namespace.
 
-       
-      
+    - name: Try the cluster!
+      run: |
+       kubectl describe service myapp-service -n default # Describe the 'myapp-service' service to check its status.
+
     - name: Test service URLs
       run: |
-       minikube service list
-       # minikube service myapp-service --url
+       minikube service list # List all the services exposed by Minikube.
+       # minikube service myapp-service --url # Optionally, get the URL for the 'myapp-service' service.
