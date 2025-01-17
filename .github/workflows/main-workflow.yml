@@ -7,10 +7,10 @@ jobs:
   Build:
     uses: ./.github/workflows/build-and-test.yml # Reusable build workflow
 
-  Docker:
-    needs: Build
-    uses: ./.github/workflows/docker-build-push.yml # Reusable Docker build workflow
+# Docker:
+#   needs: Build
+#  uses: ./.github/workflows/docker-build-push.yml # Reusable Docker build workflow
 
   Deploy:
-    needs: Docker
+    needs: Build
     uses: ./.github/workflows/k8s-deploy.yml # Reusable Kubernetes deploy workflow
