@@ -81,19 +81,20 @@ jobs:
       run: |
         kubectl apply -f deployment.yaml # Deploy the application using Kubernetes deployment configuration.
         kubectl apply -f service.yaml # Deploy the service using the service configuration.
+    
+    - name: Delay for a minute to wait for the container to run.
+      run: |
+        echo "Wait 1 minute..." # Print wait message.
+        sleep 60 # Sleep for 60 seconds (1 minute).
+
 
   # Stage 4: Verification and Testing
   Verify:
     runs-on: ubuntu-latest # Runs the job on the latest version of Ubuntu.
     needs: Deploy # This job depends on the Deploy job
-
     steps:
-    - name: Delay for a minute
-      run: |
-        echo "Wait 1 minute..." # Print wait message.
-        sleep 60 # Sleep for 60 seconds (1 minute).
-
-    - name: Try the cluster and Pods
+  
+    - name: check the cluster and Pods
       run: |
         kubectl get pods -A # Check the status of all pods across namespaces.
         kubectl get pods # Check the status of pods in the current namespace.
