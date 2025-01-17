@@ -86,20 +86,7 @@ jobs:
       run: |
         echo "Wait 1 minute..." # Print wait message.
         sleep 60 # Sleep for 60 seconds (1 minute).
-
-
-  # Stage 4: Verification and Testing
-  Verify:
-    runs-on: ubuntu-latest # Runs the job on the latest version of Ubuntu.
-    needs: Deploy # This job depends on the Deploy job
-    steps:
-    - name: Start Minikube
-      run: |
-       minikube start --driver=docker # Start Minikube with Docker as the driver
-       eval $(minikube -p minikube docker-env) # Set up Docker environment for Minikube
-       kubectl config use-context minikube # Ensure kubectl uses Minikube's context
-
-  
+   
     - name: check the cluster and Pods
       run: |
         kubectl get pods -A # Check the status of all pods across namespaces.
