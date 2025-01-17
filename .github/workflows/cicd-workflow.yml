@@ -4,21 +4,19 @@ on:
  workflow_dispatch:
   # push:
    # branches:
-    #  - main  # Trigger the pipeline when pushing to the main branch
+    #  - main  
   # pull_request:
    # branches:
-    #  - main  # Trigger the pipeline for pull requests to the main branch
-
+    #  - main 
 jobs:
   Build:
-    runs-on: ubuntu-latest  # GitHub-hosted runner (Ubuntu is used, but you can choose other OS like macOS or Windows)
-
+    runs-on: ubuntu-latest 
     steps:
     # Step 1: Checkout the code from GitHub repository
     - name: Checkout repository
       uses: actions/checkout@v4.2.2
 
-    # Step 2: Set up JDK 11 (or any version you need)
+    # Step 2: Set up JDK 17 (or any version you need)
     - name: Set up JDK
       uses: actions/setup-java@v4.6.0
       with:
@@ -52,11 +50,11 @@ jobs:
       #  docker push hassan1049/myapp:v1
   
    
-    # Step 8: Set up kubectl for Kubernetes deployment
+    # Step 8: Set up minikube for Kubernetes deployment
     - name: Set up kubectl
       uses: medyagh/setup-minikube@master
 
-    - name: Try the cluster !
+    - name: Test the cluster !
       run: kubectl get pods -A
       
     - name: Build image
@@ -67,6 +65,7 @@ jobs:
           docker push hassan1049/myapp:v2
           echo -n "verifying images:"
           docker images      
+  
     - name: Deploy to minikube
       run: |
          kubectl apply -f deployment.yaml
@@ -79,9 +78,11 @@ jobs:
       run: |
        kubectl get pods -A
        kubectl get pods
+    
     - name: Describe pods
       run: |
        kubectl describe pods
+    
     - name: get deployment details
       run: |
        kubectl get deployments
