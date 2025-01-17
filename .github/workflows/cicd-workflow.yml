@@ -53,7 +53,9 @@ jobs:
     needs: Docker # This job depends on the Docker job
 
     steps:
-    
+    - name: Checkout repository
+      uses: actions/checkout@v4.2.2 # Checkout the code from the GitHub repository.
+   
     - name: Log in to Docker Hub
       uses: docker/login-action@v2 # Log in to Docker Hub using credentials stored in GitHub secrets.
       with:
