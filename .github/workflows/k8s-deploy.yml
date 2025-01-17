@@ -1,0 +1,65 @@
+name: Kubernetes Deployment
+
+on:
+  workflow_call:  # This workflow will be called from another workflow
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: hassan1049/myapp
+      IMAGE_TAG: v4
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.2.2
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Set up kubectl and Minikube for deployment
+      uses: medyagh/setup-minikube@master
+
+    - name: Test Kubernetes cluster
+      run: kubectl get pods -A
+
+    - name: Build and Push image to Minikube's Docker environment
+      run: |
+        eval $(minikube -p minikube docker-env)
+        docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} . # Build Docker image using the Dockerfile.
+        # docker build -t hassan1049/myapp:v2 . # Build Docker image for deployment.
+        # docker push hassan1049/myapp:v2 # Push the Docker image to Docker Hub (optional).
+        docker push ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} # Push the built Docker image to Docker Hub.
+
+    - name: Deploy to Minikube
+      run: |
+        kubectl apply -f deployment.yaml # Deploy the application using Kubernetes deployment configuration.
+        kubectl apply -f service.yaml # Deploy the service using the service configuration.
+    
+    - name: Delay for a minute to wait for the container to run.
+      run: |
+        echo "Wait 1 minute..." # Print wait message.
+        sleep 60 # Sleep for 60 seconds (1 minute).
+   
+    - name: check the cluster and Pods
+      run: |
+        kubectl get pods -A # Check the status of all pods across namespaces.
+        kubectl get pods # Check the status of pods in the current namespace.
+    - name: Describe pods to see if there are any issues with the pod
+      run: |
+        kubectl describe pods # Describe pods to get detailed information and diagnose issues.
+    - name: Get deployment details
+      run: |
+        kubectl get deployments # List all deployments in the cluster.
+        kubectl describe deployment myapp -n default # Describe the 'myapp' deployment in the default namespace.
+    - name: Describe service
+      run: |
+        kubectl describe service myapp-service -n default # Describe the 'myapp-service' service to check its status.
+    - name: Test service URLs
+      run: |
+        minikube service list # List all the services exposed by Minikube.
+        # minikube service myapp-service --url # Optionally, get the URL for the 'myapp-service' service.
+
