@@ -70,16 +70,17 @@ jobs:
       run: |
          kubectl apply -f deployment.yaml
          kubectl apply -f service.yaml
-    - name: Delay for 5 minutes
+    - name: Delay for a minutes
       run: |
-        echo "Waiting for 5 minutes..."
-        sleep 300  # Sleep for 300 seconds (5 minutes)
-    - name: Try the cluster !
+        echo "wait 1 minute..."
+        sleep 60  # Sleep for 300 seconds (5 minutes)
+    
+    - name: Try the cluster and Pods
       run: |
        kubectl get pods -A
        kubectl get pods
     
-    - name: Describe pods
+    - name: Describe pods to see if there is any issues with the pod.
       run: |
        kubectl describe pods
     
@@ -95,7 +96,7 @@ jobs:
 
        
       
-    # - name: Test service URLs
-     # run: |
-      # minikube service list
+    - name: Test service URLs
+      run: |
+       minikube service list
        # minikube service myapp-service --url
